@@ -21,7 +21,7 @@ const initialState = {
   loading: false,
   loaded: false,
   error: '',
-  data: {},
+  data: localStorage.user ? JSON.parse(localStorage.user) : {},
 } as SignInState
 
 const signInSlice = createSlice({
@@ -37,6 +37,9 @@ const signInSlice = createSlice({
       })
       .addCase(signIn.fulfilled, (state, action) => {
         state.data = action.payload
+
+        localStorage.user = JSON.stringify(action.payload)
+
         state.loading = false
         state.loaded = true
       })
