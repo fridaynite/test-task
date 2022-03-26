@@ -27,7 +27,13 @@ const initialState = {
 const signInSlice = createSlice({
   name: 'loan-score',
   initialState,
-  reducers: {},
+  reducers: {
+    signOut: (state) => {
+      localStorage.removeItem('user')
+
+      state.data = {}
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(signIn.pending, (state) => {
@@ -50,5 +56,7 @@ const signInSlice = createSlice({
       })
   },
 })
+
+export const { signOut } = signInSlice.actions
 
 export default signInSlice.reducer

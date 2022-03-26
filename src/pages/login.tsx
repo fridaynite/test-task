@@ -1,4 +1,6 @@
-import { useDispatch } from 'react-redux'
+import { useEffect } from 'react'
+
+import { useDispatch, useSelector } from 'react-redux'
 
 import { useFormik } from 'formik'
 import * as yup from 'yup'
@@ -19,6 +21,9 @@ import {
 
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined'
 import { createTheme, ThemeProvider } from '@mui/material/styles'
+import { RootState } from 'store'
+
+import { useNavigate } from 'react-router-dom'
 
 interface FormState {
   email: string
@@ -38,8 +43,17 @@ const validationSchema = yup.object({
 })
 
 export const LoginPage = () => {
+  const navigate = useNavigate()
   const dispatch = useDispatch()
   const theme = createTheme()
+
+  const signInSlice = useSelector((state: RootState) => state.signIn)
+
+  useEffect(() => {
+    if (Object.keys(signInSlice.data).length) {
+      navigate('/')
+    }
+  }, [signInSlice.data, navigate])
 
   const handleChange = (values: FormState) => {
     const { email, password, remember } = values
