@@ -1,3 +1,4 @@
+import { useEffect } from 'react'
 import { useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 
@@ -8,6 +9,12 @@ export const AuthOnly = (props: any) => {
 
   const navigate = useNavigate()
 
+  useEffect(() => {
+    if (!Object.keys(signIn.data).length && props.redirect) {
+      navigate('/login')
+    }
+  }, [signIn.data])
+
   const checkAccess = () => {
     const userInfoKeys = Object.keys(signIn.data)
 
@@ -16,15 +23,6 @@ export const AuthOnly = (props: any) => {
     }
 
     return false
-  }
-
-  if (props.redirect) {
-    if (checkAccess()) {
-      return props.children
-    }
-    if (!checkAccess()) {
-      navigate(props.redirect)
-    }
   }
 
   return checkAccess() ? props.children : null

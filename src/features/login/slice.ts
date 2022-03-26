@@ -2,13 +2,30 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 
 import { api } from 'helpers/api'
 
-export const signIn = createAsyncThunk('signIn', async (data: object) => {
-  const url = '/login'
+interface SignInData {
+  email: string
+  password: string
+  remember: boolean
+}
 
-  const response = await api().post(url, data)
+export const signIn = createAsyncThunk(
+  'signIn',
+  async (data: SignInData, thunkApi) => {
+    const url = '/login'
 
-  return response.data
-})
+    try {
+      const response = await api().post(url, data)
+
+      return { ...response.data, remember: data.remember }
+    } catch (err: any) {
+      if (!err.response) {
+        throw err
+      }
+
+      return thunkApi.rejectWithValue(err.response.data)
+    }
+  },
+)
 
 interface SignInState {
   loaded: boolean
@@ -25,7 +42,7 @@ const initialState = {
 } as SignInState
 
 const signInSlice = createSlice({
-  name: 'loan-score',
+  name: 'signIn',
   initialState,
   reducers: {
     signOut: (state) => {
@@ -33,18 +50,23 @@ const signInSlice = createSlice({
 
       state.data = {}
     },
+    updateName: (state, action) => {
+      state.data.name = action.payload
+    },
   },
   extraReducers: (builder) => {
     builder
       .addCase(signIn.pending, (state) => {
         state.loading = true
         state.loaded = false
-        state.error = {}
+        state.error = ''
       })
       .addCase(signIn.fulfilled, (state, action) => {
         state.data = action.payload
 
-        localStorage.user = JSON.stringify(action.payload)
+        if (action.payload.remember) {
+          localStorage.user = JSON.stringify(action.payload)
+        }
 
         state.loading = false
         state.loaded = true
@@ -57,6 +79,6 @@ const signInSlice = createSlice({
   },
 })
 
-export const { signOut } = signInSlice.actions
+export const { signOut, updateName } = signInSlice.actions
 
 export default signInSlice.reducer

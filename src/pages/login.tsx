@@ -17,6 +17,7 @@ import {
   FormControlLabel,
   Checkbox,
   Box,
+  Alert,
 } from '@mui/material'
 
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined'
@@ -38,7 +39,7 @@ const validationSchema = yup.object({
     .required('Email is required'),
   password: yup
     .string()
-    .min(5, 'Password should be of minimum 5 characters length')
+    .min(3, 'Password should be of minimum 3 characters length')
     .required('Password is required'),
 })
 
@@ -58,11 +59,10 @@ export const LoginPage = () => {
   const handleChange = (values: FormState) => {
     const { email, password, remember } = values
 
-    console.log(remember)
-
     const data = {
       email,
       password,
+      remember,
     }
 
     dispatch(signIn(data))
@@ -102,6 +102,9 @@ export const LoginPage = () => {
             noValidate
             sx={{ mt: 1 }}
           >
+            {signInSlice.error && (
+              <Alert severity="error">{signInSlice.error}</Alert>
+            )}
             <TextField
               fullWidth
               id="email"
