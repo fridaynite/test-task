@@ -23,7 +23,6 @@ import { createTheme, ThemeProvider } from '@mui/material/styles'
 interface FormState {
   email: string
   password: string
-  remember: boolean
 }
 
 const validationSchema = yup.object({
@@ -41,27 +40,22 @@ export const LoginPage = () => {
   const dispatch = useDispatch()
   const theme = createTheme()
 
-  const handleChange = (values: FormState) => {
-    const { email, password, remember } = values
-
-    console.log(remember)
-
-    const data = {
-      email,
-      password,
-    }
-
-    dispatch(signIn(data))
-  }
-
   const formik = useFormik({
     initialValues: {
       email: 'johndoe@gmail.com',
       password: 'qwerty',
-      remember: false,
     },
     validationSchema: validationSchema,
-    onSubmit: handleChange,
+    onSubmit: (values: FormState) => {
+      const { email, password } = values
+
+      const data = {
+        email,
+        password,
+      }
+
+      dispatch(signIn(data))
+    },
   })
 
   return (
@@ -111,15 +105,7 @@ export const LoginPage = () => {
             />
 
             <FormControlLabel
-              control={
-                <Checkbox
-                  id="remember"
-                  name="remember"
-                  color="primary"
-                  value={formik.values.remember}
-                  onChange={formik.handleChange}
-                />
-              }
+              control={<Checkbox value="remember" color="primary" />}
               label="Remember me"
             />
             <Button

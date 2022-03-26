@@ -1,9 +1,9 @@
 import { configureStore } from '@reduxjs/toolkit'
 
-//import user from 'features/user/slice'
+import signIn from 'features/login/slice'
 
 export default configureStore({
   reducer: {
-    //user,
+    signIn,
   },
 })
