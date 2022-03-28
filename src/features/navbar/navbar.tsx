@@ -1,6 +1,8 @@
 import { useDispatch } from 'react-redux'
 import { Link as RouterLink } from 'react-router-dom'
 
+import styled from 'styled-components'
+
 import { signOut } from 'features/login/slice'
 
 import {
@@ -13,6 +15,29 @@ import {
   Link,
 } from '@mui/material'
 
+const StyledTypography = styled(Typography)`
+  margin-right: 15px;
+  font-size: 25px;
+  font-weight: bold;
+  @media (max-width: 900px) {
+    margin-right: 5px;
+    font-size: 20px;
+  }
+`
+
+const StyledButton = styled(Button)`
+  margin-top: 15px;
+  color: white;
+  margin-bottom: 15px;
+  font-size: 17px;
+  &:hover {
+    color: #f1f1f1c5;
+  }
+  @media (max-width: 900px) {
+    font-size: 14px;
+  }
+`
+
 export const Navbar = () => {
   const dispatch = useDispatch()
 
@@ -20,15 +45,7 @@ export const Navbar = () => {
     <AppBar position="static">
       <Container maxWidth="xl">
         <Toolbar disableGutters>
-          <Typography
-            noWrap
-            component="div"
-            sx={{
-              mr: 2,
-              display: { xs: 'flex', md: 'flex' },
-              typography: { xs: 'h6', md: 'h4' },
-            }}
-          >
+          <StyledTypography noWrap>
             <Link
               component={RouterLink}
               to="/"
@@ -38,17 +55,10 @@ export const Navbar = () => {
             >
               LOGO
             </Link>
-          </Typography>
+          </StyledTypography>
 
-          <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'flex' } }}>
-            <Button
-              sx={{
-                my: 2,
-                color: 'white',
-                display: 'block',
-                typography: { xs: 'subtitle2', md: 'button' },
-              }}
-            >
+          <Box sx={{ flexGrow: 1 }}>
+            <StyledButton>
               <Link
                 component={RouterLink}
                 to="/profile"
@@ -57,16 +67,13 @@ export const Navbar = () => {
               >
                 Profile
               </Link>
-            </Button>
+            </StyledButton>
           </Box>
 
           <Box sx={{ flexGrow: 0 }}>
-            <Button
-              onClick={() => dispatch(signOut())}
-              sx={{ my: 2, color: 'white', display: 'block' }}
-            >
+            <StyledButton onClick={() => dispatch(signOut())}>
               Logout
-            </Button>
+            </StyledButton>
           </Box>
         </Toolbar>
       </Container>

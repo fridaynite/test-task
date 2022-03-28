@@ -2,6 +2,8 @@ import { useEffect } from 'react'
 
 import { useDispatch, useSelector } from 'react-redux'
 
+import styled from 'styled-components'
+
 import { useFormik } from 'formik'
 import * as yup from 'yup'
 
@@ -43,6 +45,13 @@ const validationSchema = yup.object({
     .required('Password is required'),
 })
 
+const StyledBox = styled(Box)`
+  margin-top: 50px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`
+
 export const LoginPage = () => {
   const navigate = useNavigate()
   const dispatch = useDispatch()
@@ -82,14 +91,7 @@ export const LoginPage = () => {
     <ThemeProvider theme={theme}>
       <Container component="main" maxWidth="xs">
         <CssBaseline />
-        <Box
-          sx={{
-            marginTop: 8,
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-          }}
-        >
+        <StyledBox>
           <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
             <LockOutlinedIcon />
           </Avatar>
@@ -103,13 +105,16 @@ export const LoginPage = () => {
             sx={{ mt: 1 }}
           >
             {signInSlice.error && (
-              <Alert severity="error">{signInSlice.error}</Alert>
+              <Alert severity="error" sx={{ mb: 1 }}>
+                {signInSlice.error}
+              </Alert>
             )}
             <TextField
               fullWidth
               id="email"
               name="email"
               label="Email"
+              margin="normal"
               value={formik.values.email}
               onChange={formik.handleChange}
               error={formik.touched.email && Boolean(formik.errors.email)}
@@ -148,7 +153,7 @@ export const LoginPage = () => {
               Sign In
             </Button>
           </Box>
-        </Box>
+        </StyledBox>
       </Container>
     </ThemeProvider>
   )

@@ -2,6 +2,8 @@ import * as React from 'react'
 import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 
+import styled from 'styled-components'
+
 import {
   Container,
   Typography,
@@ -11,11 +13,14 @@ import {
   Box,
 } from '@mui/material'
 
-import { createTheme, ThemeProvider } from '@mui/material/styles'
-
 import { updateName } from 'features/login/slice'
 
-const theme = createTheme()
+const StyledBox = styled(Box)`
+  margin-top: 50px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`
 
 export function ProfilePage() {
   const dispatch = useDispatch()
@@ -43,47 +48,33 @@ export function ProfilePage() {
   }
 
   return (
-    <ThemeProvider theme={theme}>
-      <Container component="main" maxWidth="xs">
-        <CssBaseline />
-        <Box
-          sx={{
-            marginTop: 8,
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-          }}
-        >
-          <Typography component="h1" variant="h5">
-            Enter your name
-          </Typography>
-          <Box
-            component="form"
-            onSubmit={handleSubmit}
-            noValidate
-            sx={{ mt: 1 }}
+    <Container component="main" maxWidth="xs">
+      <CssBaseline />
+      <StyledBox>
+        <Typography component="h1" variant="h5">
+          Enter your name
+        </Typography>
+        <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
+          <TextField
+            margin="normal"
+            required
+            fullWidth
+            id="username"
+            label="Username"
+            name="username"
+            autoComplete="username"
+            autoFocus
+          />
+          <Button
+            type="submit"
+            fullWidth
+            variant="contained"
+            sx={{ mt: 3, mb: 2 }}
           >
-            <TextField
-              margin="normal"
-              required
-              fullWidth
-              id="username"
-              label="Username"
-              name="username"
-              autoComplete="username"
-              autoFocus
-            />
-            <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-              sx={{ mt: 3, mb: 2 }}
-            >
-              Change
-            </Button>
-          </Box>
+            Change
+          </Button>
         </Box>
-      </Container>
-    </ThemeProvider>
+      </StyledBox>
+    </Container>
   )
 }
